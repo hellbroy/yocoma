@@ -2,31 +2,31 @@
   "yocomaApp": {
     "teamContact": {
       "home": {
-        "title": "Team Contacts",
+        "title": "Teamkontakte",
         "refreshListLabel": "Liste aktualisieren",
-        "createLabel": "Team Contact erstellen",
-        "createOrEditLabel": "Team Contact erstellen oder bearbeiten",
+        "createLabel": "Teamkontakt erstellen",
+        "createOrEditLabel": "Teamkontakt erstellen oder bearbeiten",
         "notFound": "Keine Team Contacts gefunden"
       },
-      "created": "Team Contact erstellt mit ID {{ param }}",
-      "updated": "Team Contact aktualisiert mit ID {{ param }}",
-      "deleted": "Team Contact gelöscht mit ID {{ param }}",
+      "created": "Teamkontakt erstellt mit ID {{ param }}",
+      "updated": "Teamkontakt aktualisiert mit ID {{ param }}",
+      "deleted": "Teamkontakt gelöscht mit ID {{ param }}",
       "delete": {
-        "question": "Soll Team Contact {{ id }} wirklich dauerhaft gelöscht werden?"
+        "question": "Soll Teamkontakt {{ id }} wirklich dauerhaft gelöscht werden?"
       },
       "detail": {
-        "title": "Team Contact"
+        "title": "Teamkontakt"
       },
       "id": "ID",
-      "roleType": "Role Type",
-      "role": "Role",
-      "description": "Description",
-      "contact": "Contact",
+      "roleType": "Typ der Rolle",
+      "role": "Rolle",
+      "description": "Beschreibung",
+      "contact": "Kontakt",
       "team": "Team",
       "help": {
-        "roleType": "The type of role the contact takes within the team",
-        "role": "A brief name of the role the contact takes within the team",
-        "description": "A more detailed description of the contact&#39;s role within the team"
+        "roleType": "Der Typ der Rolle, die der Kontakt innerhalb des Teams einnimmt.",
+        "role": "Eine kurzer Name der Rolle, die der Kontakt innerhalb des Teams einnimmt.",
+        "description": "Eine etwas detailliertere Beschreibung der Rolle."
       }
     }
   }

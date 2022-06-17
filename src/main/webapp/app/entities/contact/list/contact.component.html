@@ -56,7 +56,7 @@
             <a *ngIf="contact.image" (click)="openFile(contact.image, contact.imageContentType)">
               <img [src]="'data:' + contact.imageContentType + ';base64,' + contact.image" style="max-height: 30px" alt="contact image" />
             </a>
-            <span *ngIf="contact.image">{{ contact.imageContentType }}, {{ byteSize(contact.image) }}</span>
+            <!--span *ngIf="contact.image">{{ contact.imageContentType }}, {{ byteSize(contact.image) }}</span-->
           </td>
           <td class="text-end">
             <div class="btn-group">

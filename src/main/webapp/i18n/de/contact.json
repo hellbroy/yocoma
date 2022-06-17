@@ -2,29 +2,29 @@
   "yocomaApp": {
     "contact": {
       "home": {
-        "title": "Contacts",
+        "title": "Kontakte",
         "refreshListLabel": "Liste aktualisieren",
         "createLabel": "Contact erstellen",
-        "createOrEditLabel": "Contact erstellen oder bearbeiten",
+        "createOrEditLabel": "Kontakt erstellen oder bearbeiten",
         "notFound": "Keine Contacts gefunden"
       },
-      "created": "Contact erstellt mit ID {{ param }}",
-      "updated": "Contact aktualisiert mit ID {{ param }}",
-      "deleted": "Contact gelöscht mit ID {{ param }}",
+      "created": "Kontakt erstellt mit ID {{ param }}",
+      "updated": "Kontakt aktualisiert mit ID {{ param }}",
+      "deleted": "Kontakt gelöscht mit ID {{ param }}",
       "delete": {
-        "question": "Soll Contact {{ id }} wirklich dauerhaft gelöscht werden?"
+        "question": "Soll Kontakt {{ id }} wirklich dauerhaft gelöscht werden?"
       },
       "detail": {
-        "title": "Contact"
+        "title": "Kontakt"
       },
       "id": "ID",
-      "firstname": "Firstname",
-      "lastname": "Lastname",
+      "firstname": "Vorname",
+      "lastname": "Nachname",
       "email": "Email",
-      "phone": "Phone",
-      "remark": "Remark",
-      "image": "Image",
-      "teamContact": "Team Contact"
+      "phone": "Telefon",
+      "remark": "Bemerkung",
+      "image": "Bild",
+      "teamContact": "Teamkontakt"
     }
   }
 }

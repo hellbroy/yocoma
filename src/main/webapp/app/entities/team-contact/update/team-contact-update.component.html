@@ -73,7 +73,7 @@
               [ngValue]="contactOption.id === editForm.get('contact')!.value?.id ? editForm.get('contact')!.value : contactOption"
               *ngFor="let contactOption of contactsSharedCollection; trackBy: trackContactById"
             >
-              {{ contactOption.id }}
+              {{ contactOption.lastname }}, {{ contactOption.firstname }}
             </option>
           </select>
         </div>
@@ -86,7 +86,7 @@
               [ngValue]="teamOption.id === editForm.get('team')!.value?.id ? editForm.get('team')!.value : teamOption"
               *ngFor="let teamOption of teamsSharedCollection; trackBy: trackTeamById"
             >
-              {{ teamOption.id }}
+              {{ teamOption.name }}
             </option>
           </select>
         </div>

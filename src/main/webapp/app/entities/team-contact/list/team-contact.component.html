@@ -51,12 +51,12 @@
           <td>{{ teamContact.description }}</td>
           <td>
             <div *ngIf="teamContact.contact">
-              <a [routerLink]="['/contact', teamContact.contact?.id, 'view']">{{ teamContact.contact?.id }}</a>
+              <a [routerLink]="['/contact', teamContact.contact?.id, 'view']">{{ teamContact.contact?.lastname }}, {{ teamContact.contact?.firstname }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="teamContact.team">
-              <a [routerLink]="['/team', teamContact.team?.id, 'view']">{{ teamContact.team?.id }}</a>
+              <a [routerLink]="['/team', teamContact.team?.id, 'view']">{{ teamContact.team?.name }}</a>
             </div>
           </td>
           <td class="text-end">

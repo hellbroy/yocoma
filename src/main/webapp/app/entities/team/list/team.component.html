@@ -51,7 +51,7 @@
             <a *ngIf="team.logo" (click)="openFile(team.logo, team.logoContentType)">
               <img [src]="'data:' + team.logoContentType + ';base64,' + team.logo" style="max-height: 30px" alt="team image" />
             </a>
-            <span *ngIf="team.logo">{{ team.logoContentType }}, {{ byteSize(team.logo) }}</span>
+            <!--span *ngIf="team.logo">{{ team.logoContentType }}, {{ byteSize(team.logo) }}</span-->
           </td>
           <td>{{ team.description }}</td>
           <td class="text-end">

@@ -6,8 +6,8 @@
       "home": "Startseite",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
-        "main": "Kontakte",
-        "teamContact": "Team-Kontakte",
+        "main": "Kontaktmanagement",
+        "teamContact": "Teamkontakte",
         "team": "Team",
         "contact": "Kontakt",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"

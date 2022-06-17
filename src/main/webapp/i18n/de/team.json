@@ -21,8 +21,8 @@
       "name": "Name",
       "motto": "Motto",
       "logo": "Logo",
-      "description": "Description",
-      "teamContact": "Team Contact"
+      "description": "Beschreibung",
+      "teamContact": "Teamkontakt"
     }
   }
 }
