@@ -1,0 +1,29 @@
+entity TeamContact {
+    role String required,
+    roleType RoleType,
+    description String
+}
+
+entity Team {
+    name String required,
+    description String
+}
+
+entity Contact {
+    firstname String,
+    lastname String required,
+    email String,
+    phone String,
+    remark String
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Contact to TeamContact{contact},
+	Team to TeamContact{team}
+}
+
+enum RoleType {
+    JUNIOR_MEMBER, SENIOR_MEMBER, PRODUCT_OWNER, SCRUM_MASTER
+}
+
