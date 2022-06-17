@@ -1,6 +1,6 @@
 id;role_type;role;description;contact_id;team_id
-1;SCRUM_MASTER;Crisis-Coordinator;1;1
-2;JUNIOR_MEMBER;Support;2;2
-3;JUNIOR_MEMBER;Support;3;1
-4;JUNIOR_MEMBER;Support;4;2
-5;JUNIOR_MEMBER;Support;2;1
+1;SCRUM_MASTER;Crisis-Coordinator;;1;1
+2;JUNIOR_MEMBER;Support;;2;2
+3;JUNIOR_MEMBER;Support;;3;1
+4;JUNIOR_MEMBER;Support;;4;2
+5;JUNIOR_MEMBER;Support;;2;1

@@ -1,6 +1,6 @@
 id;firstname;lastname;email;phone;remark;image;image_content_type
 1;Marcel;Rehfeld;"marel_rehfeld@computacenter.com";(040) 12345678;;../fake-data/blob/black.png;image/png
-2;Helge;Borchard;";helge.borchard@web.de";(040) 98765432;;../fake-data/blob/helge.png;image/png
-3;Maja;Musterfrau;";maja.musterfrau@web.de";(040) 923415432;;../fake-data/blob/white.png;image/png
-4;Max;Mustermann;";max.mustermann@web.de";(040) 781545732;;../fake-data/blob/yellow.png;image/png
+2;Helge;Borchard;"helge.borchard@web.de";(040) 98765432;;../fake-data/blob/helge.jpeg;image/png
+3;Maja;Musterfrau;"maja.musterfrau@web.de";(040) 923415432;;../fake-data/blob/white.png;image/png
+4;Max;Mustermann;"max.mustermann@web.de";(040) 781545732;;../fake-data/blob/yellow.png;image/png
 
