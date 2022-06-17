@@ -1,29 +1,39 @@
+/**
+ * The m-n-relationship between a Team and its Contacts.
+ * A Team can have multiple contacts.
+ * A Contact can belong to multiple Teams.
+*/
 entity TeamContact {
-    role String required,
-    roleType RoleType,
-    description String
+    roleType RoleType /** The type of role the contact takes within the team */,
+    role String required /** A brief name of the role the contact takes within the team */,
+    description String /** A more detailed description of the contact's role within the team */,
 }
 
 entity Team {
     name String required,
+    motto String,
+    logo ImageBlob,
     description String
 }
 
 entity Contact {
-    firstname String,
+    firstname String required,
     lastname String required,
-    email String,
+    email String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/),
     phone String,
-    remark String
+    remark String,
+    image ImageBlob
 }
 
-// defining multiple OneToMany relationships with comments
 relationship OneToMany {
 	Contact to TeamContact{contact},
 	Team to TeamContact{team}
 }
 
+/**
+* The different types of role a Contact can take within a Team.
+*/
 enum RoleType {
-    JUNIOR_MEMBER, SENIOR_MEMBER, PRODUCT_OWNER, SCRUM_MASTER
+    JUNIOR_MEMBER, SENIOR_MEMBER, PRODUCT_OWNER, SCRUM_MASTER, STAKEHOLDER
 }
 

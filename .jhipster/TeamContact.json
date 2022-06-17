@@ -1,0 +1,48 @@
+{
+  "applications": "*",
+  "changelogDate": "20220617075646",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "team_contact",
+  "fields": [
+    {
+      "fieldName": "roleType",
+      "fieldType": "RoleType",
+      "fieldTypeJavadoc": "The different types of role a Contact can take within a Team.",
+      "fieldValues": "JUNIOR_MEMBER,SENIOR_MEMBER,PRODUCT_OWNER,SCRUM_MASTER,STAKEHOLDER",
+      "javadoc": "The type of role the contact takes within the team"
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"],
+      "javadoc": "A brief name of the role the contact takes within the team"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "javadoc": "A more detailed description of the contact's role within the team"
+    }
+  ],
+  "fluentMethods": true,
+  "javadoc": "The m-n-relationship between a Team and its Contacts.\\nA Team can have multiple contacts.\\nA Contact can belong to multiple Teams.",
+  "jpaMetamodelFiltering": false,
+  "name": "TeamContact",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "contact",
+      "otherEntityRelationshipName": "teamContact",
+      "relationshipName": "contact",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "team",
+      "otherEntityRelationshipName": "teamContact",
+      "relationshipName": "team",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

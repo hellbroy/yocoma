@@ -1,0 +1,33 @@
+{
+  "yocomaApp": {
+    "teamContact": {
+      "home": {
+        "title": "Team Contacts",
+        "refreshListLabel": "Liste aktualisieren",
+        "createLabel": "Team Contact erstellen",
+        "createOrEditLabel": "Team Contact erstellen oder bearbeiten",
+        "notFound": "Keine Team Contacts gefunden"
+      },
+      "created": "Team Contact erstellt mit ID {{ param }}",
+      "updated": "Team Contact aktualisiert mit ID {{ param }}",
+      "deleted": "Team Contact gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Team Contact {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Team Contact"
+      },
+      "id": "ID",
+      "roleType": "Role Type",
+      "role": "Role",
+      "description": "Description",
+      "contact": "Contact",
+      "team": "Team",
+      "help": {
+        "roleType": "The type of role the contact takes within the team",
+        "role": "A brief name of the role the contact takes within the team",
+        "description": "A more detailed description of the contact&#39;s role within the team"
+      }
+    }
+  }
+}

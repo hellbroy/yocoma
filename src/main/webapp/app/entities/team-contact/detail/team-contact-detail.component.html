@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="teamContact">
+      <h2 data-cy="teamContactDetailsHeading"><span jhiTranslate="yocomaApp.teamContact.detail.title">Team Contact</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ teamContact.id }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="yocomaApp.teamContact.roleType" [ngbTooltip]="'yocomaApp.teamContact.help.roleType' | translate"
+            >Role Type</span
+          >
+        </dt>
+        <dd>
+          <span jhiTranslate="{{ 'yocomaApp.RoleType.' + teamContact.roleType }}">{{ teamContact.roleType }}</span>
+        </dd>
+        <dt><span jhiTranslate="yocomaApp.teamContact.role" [ngbTooltip]="'yocomaApp.teamContact.help.role' | translate">Role</span></dt>
+        <dd>
+          <span>{{ teamContact.role }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="yocomaApp.teamContact.description" [ngbTooltip]="'yocomaApp.teamContact.help.description' | translate"
+            >Description</span
+          >
+        </dt>
+        <dd>
+          <span>{{ teamContact.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="yocomaApp.teamContact.contact">Contact</span></dt>
+        <dd>
+          <div *ngIf="teamContact.contact">
+            <a [routerLink]="['/contact', teamContact.contact?.id, 'view']">{{ teamContact.contact?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="yocomaApp.teamContact.team">Team</span></dt>
+        <dd>
+          <div *ngIf="teamContact.team">
+            <a [routerLink]="['/team', teamContact.team?.id, 'view']">{{ teamContact.team?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/team-contact', teamContact.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

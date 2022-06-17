@@ -1,0 +1,12 @@
+{
+  "yocomaApp": {
+    "RoleType": {
+      "null": "",
+      "JUNIOR_MEMBER": "JUNIOR_MEMBER",
+      "SENIOR_MEMBER": "SENIOR_MEMBER",
+      "PRODUCT_OWNER": "PRODUCT_OWNER",
+      "SCRUM_MASTER": "SCRUM_MASTER",
+      "STAKEHOLDER": "STAKEHOLDER"
+    }
+  }
+}
