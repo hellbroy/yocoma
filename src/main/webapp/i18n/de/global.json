@@ -6,10 +6,10 @@
       "home": "Startseite",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
-        "main": "Entitäten",
-        "teamContact": "Team Contact",
+        "main": "Kontakte",
+        "teamContact": "Team-Kontakte",
         "team": "Team",
-        "contact": "Contact",
+        "contact": "Kontakt",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -139,5 +139,5 @@
       "not.image": "Es wird erwartet, dass die Datei ein Bild ist. Die Datei ist jedoch vom Typ \"{{ fileType }}\""
     }
   },
-  "footer": "Dies ist Ihre Fußzeile"
+  "footer": "Powered by Computacenter"
 }
