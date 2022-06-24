@@ -38,9 +38,8 @@
         <dd>
           <div *ngIf="contact.image">
             <a (click)="openFile(contact.image, contact.imageContentType)">
-              <img [src]="'data:' + contact.imageContentType + ';base64,' + contact.image" style="max-width: 100%" alt="contact image" />
+              <img [src]="'data:' + contact.imageContentType + ';base64,' + contact.image" style="max-width: 150px" alt="contact image" />
             </a>
-            {{ contact.imageContentType }}, {{ byteSize(contact.image) }}
           </div>
         </dd>
       </dl>
