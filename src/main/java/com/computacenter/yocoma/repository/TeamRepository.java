@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface TeamRepository extends JpaRepository<Team, Long> {}
+public interface TeamRepository extends JpaRepository<Team, Long>, JpaSpecificationExecutor<Team> {}

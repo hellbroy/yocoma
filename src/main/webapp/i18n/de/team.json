@@ -22,7 +22,8 @@
       "motto": "Motto",
       "logo": "Logo",
       "description": "Beschreibung",
-      "teamContact": "Teamkontakt"
+      "teamContact": "Teamkontakt",
+      "searchprompt": "Name, Motto, Beschreibung"
     }
   }
 }

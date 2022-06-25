@@ -27,7 +27,8 @@
         "roleType": "Der Typ der Rolle, die der Kontakt innerhalb des Teams einnimmt.",
         "role": "Eine kurzer Name der Rolle, die der Kontakt innerhalb des Teams einnimmt.",
         "description": "Eine etwas detailliertere Beschreibung der Rolle."
-      }
+      },
+      "searchprompt": "Rolle, Beschreibung"
     }
   }
 }

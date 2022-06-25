@@ -13,14 +13,21 @@ import { DataUtils } from 'app/core/util/data-util.service';
 })
 export class ContactComponent implements OnInit {
   contacts?: IContact[];
+  searchprompt: string;
   isLoading = false;
 
-  constructor(protected contactService: ContactService, protected dataUtils: DataUtils, protected modalService: NgbModal) {}
+  constructor(protected contactService: ContactService, protected dataUtils: DataUtils, protected modalService: NgbModal) {
+    this.searchprompt = "";
+  }
+
+  setSearchprompt(searchprompt: string): void {
+    this.searchprompt = searchprompt;
+  }
 
   loadAll(): void {
     this.isLoading = true;
 
-    this.contactService.query().subscribe({
+    this.contactService.query({'search.contains': this.searchprompt}).subscribe({
       next: (res: HttpResponse<IContact[]>) => {
         this.isLoading = false;
         this.contacts = res.body ?? [];

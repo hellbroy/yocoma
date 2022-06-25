@@ -3,6 +3,9 @@
     <span jhiTranslate="yocomaApp.contact.home.title">Contacts</span>
 
     <div class="d-flex justify-content-end">
+
+      <input class="btn bg-light text-sm-end" #searchBox id="field_searchprompt" (input)="setSearchprompt(searchBox.value)" placeholder="Vor-, Nachname, Bemerkung"/>
+
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="yocomaApp.contact.home.refreshListLabel">Refresh List</span>

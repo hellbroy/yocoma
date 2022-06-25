@@ -6,9 +6,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.computacenter.yocoma.IntegrationTest;
+import com.computacenter.yocoma.domain.Contact;
+import com.computacenter.yocoma.domain.Team;
 import com.computacenter.yocoma.domain.TeamContact;
 import com.computacenter.yocoma.domain.enumeration.RoleType;
 import com.computacenter.yocoma.repository.TeamContactRepository;
+import com.computacenter.yocoma.service.criteria.TeamContactCriteria;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -168,6 +171,324 @@ class TeamContactResourceIT {
             .andExpect(jsonPath("$.roleType").value(DEFAULT_ROLE_TYPE.toString()))
             .andExpect(jsonPath("$.role").value(DEFAULT_ROLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
+    }
+
+    @Test
+    @Transactional
+    void getTeamContactsByIdFiltering() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        Long id = teamContact.getId();
+
+        defaultTeamContactShouldBeFound("id.equals=" + id);
+        defaultTeamContactShouldNotBeFound("id.notEquals=" + id);
+
+        defaultTeamContactShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultTeamContactShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultTeamContactShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultTeamContactShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where roleType equals to DEFAULT_ROLE_TYPE
+        defaultTeamContactShouldBeFound("roleType.equals=" + DEFAULT_ROLE_TYPE);
+
+        // Get all the teamContactList where roleType equals to UPDATED_ROLE_TYPE
+        defaultTeamContactShouldNotBeFound("roleType.equals=" + UPDATED_ROLE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where roleType not equals to DEFAULT_ROLE_TYPE
+        defaultTeamContactShouldNotBeFound("roleType.notEquals=" + DEFAULT_ROLE_TYPE);
+
+        // Get all the teamContactList where roleType not equals to UPDATED_ROLE_TYPE
+        defaultTeamContactShouldBeFound("roleType.notEquals=" + UPDATED_ROLE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where roleType in DEFAULT_ROLE_TYPE or UPDATED_ROLE_TYPE
+        defaultTeamContactShouldBeFound("roleType.in=" + DEFAULT_ROLE_TYPE + "," + UPDATED_ROLE_TYPE);
+
+        // Get all the teamContactList where roleType equals to UPDATED_ROLE_TYPE
+        defaultTeamContactShouldNotBeFound("roleType.in=" + UPDATED_ROLE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where roleType is not null
+        defaultTeamContactShouldBeFound("roleType.specified=true");
+
+        // Get all the teamContactList where roleType is null
+        defaultTeamContactShouldNotBeFound("roleType.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where role equals to DEFAULT_ROLE
+        defaultTeamContactShouldBeFound("role.equals=" + DEFAULT_ROLE);
+
+        // Get all the teamContactList where role equals to UPDATED_ROLE
+        defaultTeamContactShouldNotBeFound("role.equals=" + UPDATED_ROLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where role not equals to DEFAULT_ROLE
+        defaultTeamContactShouldNotBeFound("role.notEquals=" + DEFAULT_ROLE);
+
+        // Get all the teamContactList where role not equals to UPDATED_ROLE
+        defaultTeamContactShouldBeFound("role.notEquals=" + UPDATED_ROLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleIsInShouldWork() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where role in DEFAULT_ROLE or UPDATED_ROLE
+        defaultTeamContactShouldBeFound("role.in=" + DEFAULT_ROLE + "," + UPDATED_ROLE);
+
+        // Get all the teamContactList where role equals to UPDATED_ROLE
+        defaultTeamContactShouldNotBeFound("role.in=" + UPDATED_ROLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where role is not null
+        defaultTeamContactShouldBeFound("role.specified=true");
+
+        // Get all the teamContactList where role is null
+        defaultTeamContactShouldNotBeFound("role.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleContainsSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where role contains DEFAULT_ROLE
+        defaultTeamContactShouldBeFound("role.contains=" + DEFAULT_ROLE);
+
+        // Get all the teamContactList where role contains UPDATED_ROLE
+        defaultTeamContactShouldNotBeFound("role.contains=" + UPDATED_ROLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByRoleNotContainsSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where role does not contain DEFAULT_ROLE
+        defaultTeamContactShouldNotBeFound("role.doesNotContain=" + DEFAULT_ROLE);
+
+        // Get all the teamContactList where role does not contain UPDATED_ROLE
+        defaultTeamContactShouldBeFound("role.doesNotContain=" + UPDATED_ROLE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where description equals to DEFAULT_DESCRIPTION
+        defaultTeamContactShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the teamContactList where description equals to UPDATED_DESCRIPTION
+        defaultTeamContactShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where description not equals to DEFAULT_DESCRIPTION
+        defaultTeamContactShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the teamContactList where description not equals to UPDATED_DESCRIPTION
+        defaultTeamContactShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultTeamContactShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the teamContactList where description equals to UPDATED_DESCRIPTION
+        defaultTeamContactShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where description is not null
+        defaultTeamContactShouldBeFound("description.specified=true");
+
+        // Get all the teamContactList where description is null
+        defaultTeamContactShouldNotBeFound("description.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where description contains DEFAULT_DESCRIPTION
+        defaultTeamContactShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
+
+        // Get all the teamContactList where description contains UPDATED_DESCRIPTION
+        defaultTeamContactShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+
+        // Get all the teamContactList where description does not contain DEFAULT_DESCRIPTION
+        defaultTeamContactShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
+
+        // Get all the teamContactList where description does not contain UPDATED_DESCRIPTION
+        defaultTeamContactShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByContactIsEqualToSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+        Contact contact;
+        if (TestUtil.findAll(em, Contact.class).isEmpty()) {
+            contact = ContactResourceIT.createEntity(em);
+            em.persist(contact);
+            em.flush();
+        } else {
+            contact = TestUtil.findAll(em, Contact.class).get(0);
+        }
+        em.persist(contact);
+        em.flush();
+        teamContact.setContact(contact);
+        teamContactRepository.saveAndFlush(teamContact);
+        Long contactId = contact.getId();
+
+        // Get all the teamContactList where contact equals to contactId
+        defaultTeamContactShouldBeFound("contactId.equals=" + contactId);
+
+        // Get all the teamContactList where contact equals to (contactId + 1)
+        defaultTeamContactShouldNotBeFound("contactId.equals=" + (contactId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllTeamContactsByTeamIsEqualToSomething() throws Exception {
+        // Initialize the database
+        teamContactRepository.saveAndFlush(teamContact);
+        Team team;
+        if (TestUtil.findAll(em, Team.class).isEmpty()) {
+            team = TeamResourceIT.createEntity(em);
+            em.persist(team);
+            em.flush();
+        } else {
+            team = TestUtil.findAll(em, Team.class).get(0);
+        }
+        em.persist(team);
+        em.flush();
+        teamContact.setTeam(team);
+        teamContactRepository.saveAndFlush(teamContact);
+        Long teamId = team.getId();
+
+        // Get all the teamContactList where team equals to teamId
+        defaultTeamContactShouldBeFound("teamId.equals=" + teamId);
+
+        // Get all the teamContactList where team equals to (teamId + 1)
+        defaultTeamContactShouldNotBeFound("teamId.equals=" + (teamId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultTeamContactShouldBeFound(String filter) throws Exception {
+        restTeamContactMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(teamContact.getId().intValue())))
+            .andExpect(jsonPath("$.[*].roleType").value(hasItem(DEFAULT_ROLE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].role").value(hasItem(DEFAULT_ROLE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+
+        // Check, that the count call also returns 1
+        restTeamContactMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultTeamContactShouldNotBeFound(String filter) throws Exception {
+        restTeamContactMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restTeamContactMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test

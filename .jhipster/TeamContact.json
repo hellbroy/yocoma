@@ -26,7 +26,7 @@
   ],
   "fluentMethods": true,
   "javadoc": "The m-n-relationship between a Team and its Contacts.\\nA Team can have multiple contacts.\\nA Contact can belong to multiple Teams.",
-  "jpaMetamodelFiltering": false,
+  "jpaMetamodelFiltering": true,
   "name": "TeamContact",
   "pagination": "no",
   "readOnly": false,
@@ -44,5 +44,5 @@
       "relationshipType": "many-to-one"
     }
   ],
-  "service": "no"
+  "service": "serviceClass"
 }

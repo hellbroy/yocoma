@@ -2,6 +2,9 @@ package com.computacenter.yocoma.web.rest;
 
 import com.computacenter.yocoma.domain.Team;
 import com.computacenter.yocoma.repository.TeamRepository;
+import com.computacenter.yocoma.service.TeamQueryService;
+import com.computacenter.yocoma.service.TeamService;
+import com.computacenter.yocoma.service.criteria.TeamCriteria;
 import com.computacenter.yocoma.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -24,7 +26,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class TeamResource {
 
     private final Logger log = LoggerFactory.getLogger(TeamResource.class);
@@ -34,10 +35,16 @@ public class TeamResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final TeamService teamService;
+
     private final TeamRepository teamRepository;
 
-    public TeamResource(TeamRepository teamRepository) {
+    private final TeamQueryService teamQueryService;
+
+    public TeamResource(TeamService teamService, TeamRepository teamRepository, TeamQueryService teamQueryService) {
+        this.teamService = teamService;
         this.teamRepository = teamRepository;
+        this.teamQueryService = teamQueryService;
     }
 
     /**
@@ -53,7 +60,7 @@ public class TeamResource {
         if (team.getId() != null) {
             throw new BadRequestAlertException("A new team cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Team result = teamRepository.save(team);
+        Team result = teamService.save(team);
         return ResponseEntity
             .created(new URI("/api/teams/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -85,7 +92,7 @@ public class TeamResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Team result = teamRepository.save(team);
+        Team result = teamService.update(team);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, team.getId().toString()))
@@ -120,28 +127,7 @@ public class TeamResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Team> result = teamRepository
-            .findById(team.getId())
-            .map(existingTeam -> {
-                if (team.getName() != null) {
-                    existingTeam.setName(team.getName());
-                }
-                if (team.getMotto() != null) {
-                    existingTeam.setMotto(team.getMotto());
-                }
-                if (team.getLogo() != null) {
-                    existingTeam.setLogo(team.getLogo());
-                }
-                if (team.getLogoContentType() != null) {
-                    existingTeam.setLogoContentType(team.getLogoContentType());
-                }
-                if (team.getDescription() != null) {
-                    existingTeam.setDescription(team.getDescription());
-                }
-
-                return existingTeam;
-            })
-            .map(teamRepository::save);
+        Optional<Team> result = teamService.partialUpdate(team);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -152,12 +138,26 @@ public class TeamResource {
     /**
      * {@code GET  /teams} : get all the teams.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of teams in body.
      */
     @GetMapping("/teams")
-    public List<Team> getAllTeams() {
-        log.debug("REST request to get all Teams");
-        return teamRepository.findAll();
+    public ResponseEntity<List<Team>> getAllTeams(TeamCriteria criteria) {
+        log.debug("REST request to get Teams by criteria: {}", criteria);
+        List<Team> entityList = teamQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /teams/count} : count all the teams.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/teams/count")
+    public ResponseEntity<Long> countTeams(TeamCriteria criteria) {
+        log.debug("REST request to count Teams by criteria: {}", criteria);
+        return ResponseEntity.ok().body(teamQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -169,7 +169,7 @@ public class TeamResource {
     @GetMapping("/teams/{id}")
     public ResponseEntity<Team> getTeam(@PathVariable Long id) {
         log.debug("REST request to get Team : {}", id);
-        Optional<Team> team = teamRepository.findById(id);
+        Optional<Team> team = teamService.findOne(id);
         return ResponseUtil.wrapOrNotFound(team);
     }
 
@@ -182,7 +182,7 @@ public class TeamResource {
     @DeleteMapping("/teams/{id}")
     public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
         log.debug("REST request to delete Team : {}", id);
-        teamRepository.deleteById(id);
+        teamService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

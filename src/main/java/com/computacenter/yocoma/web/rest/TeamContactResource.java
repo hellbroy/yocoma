@@ -2,6 +2,9 @@ package com.computacenter.yocoma.web.rest;
 
 import com.computacenter.yocoma.domain.TeamContact;
 import com.computacenter.yocoma.repository.TeamContactRepository;
+import com.computacenter.yocoma.service.TeamContactQueryService;
+import com.computacenter.yocoma.service.TeamContactService;
+import com.computacenter.yocoma.service.criteria.TeamContactCriteria;
 import com.computacenter.yocoma.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -24,7 +26,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class TeamContactResource {
 
     private final Logger log = LoggerFactory.getLogger(TeamContactResource.class);
@@ -34,10 +35,20 @@ public class TeamContactResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final TeamContactService teamContactService;
+
     private final TeamContactRepository teamContactRepository;
 
-    public TeamContactResource(TeamContactRepository teamContactRepository) {
+    private final TeamContactQueryService teamContactQueryService;
+
+    public TeamContactResource(
+        TeamContactService teamContactService,
+        TeamContactRepository teamContactRepository,
+        TeamContactQueryService teamContactQueryService
+    ) {
+        this.teamContactService = teamContactService;
         this.teamContactRepository = teamContactRepository;
+        this.teamContactQueryService = teamContactQueryService;
     }
 
     /**
@@ -53,7 +64,7 @@ public class TeamContactResource {
         if (teamContact.getId() != null) {
             throw new BadRequestAlertException("A new teamContact cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        TeamContact result = teamContactRepository.save(teamContact);
+        TeamContact result = teamContactService.save(teamContact);
         return ResponseEntity
             .created(new URI("/api/team-contacts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -87,7 +98,7 @@ public class TeamContactResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        TeamContact result = teamContactRepository.save(teamContact);
+        TeamContact result = teamContactService.update(teamContact);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, teamContact.getId().toString()))
@@ -122,22 +133,7 @@ public class TeamContactResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<TeamContact> result = teamContactRepository
-            .findById(teamContact.getId())
-            .map(existingTeamContact -> {
-                if (teamContact.getRoleType() != null) {
-                    existingTeamContact.setRoleType(teamContact.getRoleType());
-                }
-                if (teamContact.getRole() != null) {
-                    existingTeamContact.setRole(teamContact.getRole());
-                }
-                if (teamContact.getDescription() != null) {
-                    existingTeamContact.setDescription(teamContact.getDescription());
-                }
-
-                return existingTeamContact;
-            })
-            .map(teamContactRepository::save);
+        Optional<TeamContact> result = teamContactService.partialUpdate(teamContact);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -148,12 +144,26 @@ public class TeamContactResource {
     /**
      * {@code GET  /team-contacts} : get all the teamContacts.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of teamContacts in body.
      */
     @GetMapping("/team-contacts")
-    public List<TeamContact> getAllTeamContacts() {
-        log.debug("REST request to get all TeamContacts");
-        return teamContactRepository.findAll();
+    public ResponseEntity<List<TeamContact>> getAllTeamContacts(TeamContactCriteria criteria) {
+        log.debug("REST request to get TeamContacts by criteria: {}", criteria);
+        List<TeamContact> entityList = teamContactQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /team-contacts/count} : count all the teamContacts.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/team-contacts/count")
+    public ResponseEntity<Long> countTeamContacts(TeamContactCriteria criteria) {
+        log.debug("REST request to count TeamContacts by criteria: {}", criteria);
+        return ResponseEntity.ok().body(teamContactQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -165,7 +175,7 @@ public class TeamContactResource {
     @GetMapping("/team-contacts/{id}")
     public ResponseEntity<TeamContact> getTeamContact(@PathVariable Long id) {
         log.debug("REST request to get TeamContact : {}", id);
-        Optional<TeamContact> teamContact = teamContactRepository.findById(id);
+        Optional<TeamContact> teamContact = teamContactService.findOne(id);
         return ResponseUtil.wrapOrNotFound(teamContact);
     }
 
@@ -178,7 +188,7 @@ public class TeamContactResource {
     @DeleteMapping("/team-contacts/{id}")
     public ResponseEntity<Void> deleteTeamContact(@PathVariable Long id) {
         log.debug("REST request to delete TeamContact : {}", id);
-        teamContactRepository.deleteById(id);
+        teamContactService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

@@ -24,7 +24,8 @@
       "phone": "Telefon",
       "remark": "Bemerkung",
       "image": "Bild",
-      "teamContact": "Teamkontakt"
+      "teamContact": "Teamkontakt",
+      "searchprompt": "Vorname, Nachname, Bemerkung"
     }
   }
 }

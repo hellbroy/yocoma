@@ -9,12 +9,16 @@ entity TeamContact {
     description String /** A more detailed description of the contact's role within the team */,
 }
 
+filter TeamContact
+
 entity Team {
     name String required,
     motto String,
     logo ImageBlob,
     description String
 }
+
+filter Team
 
 entity Contact {
     firstname String required,
@@ -24,6 +28,8 @@ entity Contact {
     remark String,
     image ImageBlob
 }
+
+filter Contact
 
 relationship OneToMany {
 	Contact to TeamContact{contact},

@@ -12,14 +12,20 @@ import { TeamContactDeleteDialogComponent } from '../delete/team-contact-delete-
 })
 export class TeamContactComponent implements OnInit {
   teamContacts?: ITeamContact[];
+  searchprompt: string;
   isLoading = false;
 
-  constructor(protected teamContactService: TeamContactService, protected modalService: NgbModal) {}
+  constructor(protected teamContactService: TeamContactService, protected modalService: NgbModal) {
+    this.searchprompt = "";}
+
+  setSearchprompt(searchprompt: string): void {
+    this.searchprompt = searchprompt;
+  }
 
   loadAll(): void {
     this.isLoading = true;
 
-    this.teamContactService.query().subscribe({
+    this.teamContactService.query({'search.contains': this.searchprompt}).subscribe({
       next: (res: HttpResponse<ITeamContact[]>) => {
         this.isLoading = false;
         this.teamContacts = res.body ?? [];

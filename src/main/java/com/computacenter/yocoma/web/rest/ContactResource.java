@@ -2,6 +2,9 @@ package com.computacenter.yocoma.web.rest;
 
 import com.computacenter.yocoma.domain.Contact;
 import com.computacenter.yocoma.repository.ContactRepository;
+import com.computacenter.yocoma.service.ContactQueryService;
+import com.computacenter.yocoma.service.ContactService;
+import com.computacenter.yocoma.service.criteria.ContactCriteria;
 import com.computacenter.yocoma.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -24,7 +26,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class ContactResource {
 
     private final Logger log = LoggerFactory.getLogger(ContactResource.class);
@@ -34,10 +35,16 @@ public class ContactResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final ContactService contactService;
+
     private final ContactRepository contactRepository;
 
-    public ContactResource(ContactRepository contactRepository) {
+    private final ContactQueryService contactQueryService;
+
+    public ContactResource(ContactService contactService, ContactRepository contactRepository, ContactQueryService contactQueryService) {
+        this.contactService = contactService;
         this.contactRepository = contactRepository;
+        this.contactQueryService = contactQueryService;
     }
 
     /**
@@ -53,7 +60,7 @@ public class ContactResource {
         if (contact.getId() != null) {
             throw new BadRequestAlertException("A new contact cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Contact result = contactRepository.save(contact);
+        Contact result = contactService.save(contact);
         return ResponseEntity
             .created(new URI("/api/contacts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -87,7 +94,7 @@ public class ContactResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Contact result = contactRepository.save(contact);
+        Contact result = contactService.update(contact);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, contact.getId().toString()))
@@ -122,34 +129,7 @@ public class ContactResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Contact> result = contactRepository
-            .findById(contact.getId())
-            .map(existingContact -> {
-                if (contact.getFirstname() != null) {
-                    existingContact.setFirstname(contact.getFirstname());
-                }
-                if (contact.getLastname() != null) {
-                    existingContact.setLastname(contact.getLastname());
-                }
-                if (contact.getEmail() != null) {
-                    existingContact.setEmail(contact.getEmail());
-                }
-                if (contact.getPhone() != null) {
-                    existingContact.setPhone(contact.getPhone());
-                }
-                if (contact.getRemark() != null) {
-                    existingContact.setRemark(contact.getRemark());
-                }
-                if (contact.getImage() != null) {
-                    existingContact.setImage(contact.getImage());
-                }
-                if (contact.getImageContentType() != null) {
-                    existingContact.setImageContentType(contact.getImageContentType());
-                }
-
-                return existingContact;
-            })
-            .map(contactRepository::save);
+        Optional<Contact> result = contactService.partialUpdate(contact);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -160,12 +140,26 @@ public class ContactResource {
     /**
      * {@code GET  /contacts} : get all the contacts.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of contacts in body.
      */
     @GetMapping("/contacts")
-    public List<Contact> getAllContacts() {
-        log.debug("REST request to get all Contacts");
-        return contactRepository.findAll();
+    public ResponseEntity<List<Contact>> getAllContacts(ContactCriteria criteria) {
+        log.debug("REST request to get Contacts by criteria: {}", criteria);
+        List<Contact> entityList = contactQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /contacts/count} : count all the contacts.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/contacts/count")
+    public ResponseEntity<Long> countContacts(ContactCriteria criteria) {
+        log.debug("REST request to count Contacts by criteria: {}", criteria);
+        return ResponseEntity.ok().body(contactQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -177,7 +171,7 @@ public class ContactResource {
     @GetMapping("/contacts/{id}")
     public ResponseEntity<Contact> getContact(@PathVariable Long id) {
         log.debug("REST request to get Contact : {}", id);
-        Optional<Contact> contact = contactRepository.findById(id);
+        Optional<Contact> contact = contactService.findOne(id);
         return ResponseUtil.wrapOrNotFound(contact);
     }
 
@@ -190,7 +184,7 @@ public class ContactResource {
     @DeleteMapping("/contacts/{id}")
     public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
         log.debug("REST request to delete Contact : {}", id);
-        contactRepository.deleteById(id);
+        contactService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
