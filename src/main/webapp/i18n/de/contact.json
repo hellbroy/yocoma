@@ -15,7 +15,10 @@
         "question": "Soll Kontakt {{ id }} wirklich dauerhaft gelöscht werden?"
       },
       "detail": {
-        "title": "Kontakt"
+        "title": "Kontakt",
+        "teams": {
+          "title": "Teams"
+        }
       },
       "id": "ID",
       "firstname": "Vorname",

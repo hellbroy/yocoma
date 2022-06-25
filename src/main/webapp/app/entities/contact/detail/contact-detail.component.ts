@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IContact } from '../contact.model';
 import { DataUtils } from 'app/core/util/data-util.service';
+import {ITeamContact} from "../../team-contact/team-contact.model";
 
 @Component({
   selector: 'jhi-contact-detail',
@@ -17,6 +18,10 @@ export class ContactDetailComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ contact }) => {
       this.contact = contact;
     });
+  }
+
+  trackId(_index: number, item: ITeamContact): number {
+    return item.id!;
   }
 
   byteSize(base64String: string): string {

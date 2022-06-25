@@ -39,8 +39,10 @@ public class Team implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "team")
-    @JsonIgnoreProperties(value = { "contact", "team" }, allowSetters = true)
+    // FetchType.EAGER so that the teamContacts will be loaded.
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "team")
+    // No @JsonIgnoreProperties so that "team" and "contact" will be transferred to angular.
+    //@JsonIgnoreProperties(value = { "contact", "team" }, allowSetters = true)
     private Set<TeamContact> teamContacts = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

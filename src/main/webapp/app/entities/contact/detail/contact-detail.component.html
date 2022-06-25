@@ -44,6 +44,41 @@
         </dd>
       </dl>
 
+
+      <div class="alert alert-warning" id="no-result" *ngIf="contact.teamContacts?.length === 0">
+        <span jhiTranslate="yocomaApp.teamContact.home.notFound">No teamContacts found</span>
+      </div>
+
+      <div class="table-responsive" id="entities" *ngIf="contact.teamContacts && contact.teamContacts.length > 0">
+        <h3 data-cy="contactDetailsTeamsHeading"><span jhiTranslate="yocomaApp.contact.detail.teams.title">Teams</span></h3>
+        <table class="table table-striped" aria-describedby="page-heading">
+          <thead>
+          <tr>
+            <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+            <th scope="col"><span jhiTranslate="yocomaApp.teamContact.team">Team</span></th>
+            <th scope="col"><span jhiTranslate="yocomaApp.teamContact.roleType">Role Type</span></th>
+            <th scope="col"><span jhiTranslate="yocomaApp.teamContact.role">Role</span></th>
+            <th scope="col"><span jhiTranslate="yocomaApp.teamContact.description">Description</span></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let teamContact of contact.teamContacts; trackBy: trackId" data-cy="entityTable">
+            <td>
+              <a [routerLink]="['/team-contact', teamContact.id, 'view']">{{ teamContact.id }}</a>
+            </td>
+            <td>
+              <div *ngIf="teamContact.team">
+                <a [routerLink]="['/team', teamContact.team?.id, 'view']">{{ teamContact.team?.name }}</a>
+              </div>
+            </td>
+            <td jhiTranslate="{{ 'yocomaApp.RoleType.' + teamContact.roleType }}">{{ teamContact.roleType }}</td>
+            <td>{{ teamContact.role }}</td>
+            <td>{{ teamContact.description }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>

@@ -15,7 +15,10 @@
         "question": "Are you sure you want to delete Contact {{ id }}?"
       },
       "detail": {
-        "title": "Contact"
+        "title": "Contact",
+        "teams": {
+          "title": "Teams"
+        }
       },
       "id": "ID",
       "firstname": "Firstname",

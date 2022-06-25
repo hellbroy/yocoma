@@ -48,11 +48,11 @@ public class TeamContact implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "teamContacts" }, allowSetters = true)
     private Contact contact;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "teamContacts" }, allowSetters = true)
     private Team team;
 
